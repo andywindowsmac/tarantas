@@ -18,13 +18,13 @@ public class Database {
             // he
             String substring = searchName.substring(0, inputIndex + 1);
 
-            result = this.searchPoint(substring, result);
+            result = this.searchProduct(substring, result);
         }
 
         return result;
     }
 
-    private HashMap<String, Product> searchPoint(
+    private HashMap<String, Product> searchProduct(
             String productName, HashMap<String, Product> products
     ) {
         HashMap<String, Product> result = new HashMap<>();
