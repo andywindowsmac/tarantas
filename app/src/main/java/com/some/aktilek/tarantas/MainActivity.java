@@ -1,5 +1,6 @@
 package com.some.aktilek.tarantas;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.d("MainActivity", "clicked");
+                String key = ((Product) products.values().toArray()[i]).title;
+                pushToDetails(key);
             }
         };
     }
@@ -46,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         ProductAdapter pointAdapter = new ProductAdapter(this, products);
         this.productsList.setAdapter(pointAdapter);
     }
-
 
     private SearchView.OnQueryTextListener handleTextChange() {
         return new SearchView.OnQueryTextListener() {
@@ -62,5 +64,11 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         };
+    }
+
+    private void pushToDetails (String productKey) {
+        Intent intent = new Intent(this, ProductDetailsActivity.class);
+        intent.putExtra("SEARCH_DETAILS", productKey);
+        startActivity(intent);
     }
 }

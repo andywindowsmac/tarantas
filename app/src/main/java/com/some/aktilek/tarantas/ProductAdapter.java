@@ -1,6 +1,8 @@
 package com.some.aktilek.tarantas;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +10,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 
@@ -16,11 +21,26 @@ public class ProductAdapter extends BaseAdapter {
     private HashMap<String, Product> products;
     private LayoutInflater layoutInflater;
     private Context context;
+    private RequestQueue mRequestQueue;
+    private ImageLoader imageLoader;
 
     public ProductAdapter(Context context, HashMap<String,Product> products) {
         this.products = products;
         this.context = context;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.mRequestQueue = Volley.newRequestQueue(context);
+        this.imageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+            private final LruCache<String, Bitmap> cache = new LruCache<>(20);
+            @Override
+            public Bitmap getBitmap(String url) {
+                return cache.get(url);
+            }
+
+            @Override
+            public void putBitmap(String url, Bitmap bitmap) {
+                cache.put(url, bitmap);
+            }
+        });
     }
 
     @Override
@@ -53,18 +73,21 @@ public class ProductAdapter extends BaseAdapter {
         Product product = (Product ) this.products.values().toArray()[i];
 
         viewHolder.textView.setText(product.title);
-        Glide.with(context).load(product.imageUrl).into(viewHolder.imageView);
+        viewHolder.priceTextView.setText(product.price + " tg");
+        viewHolder.imageView.setImageUrl(product.imageUrl, imageLoader);
 
         return view;
     }
 }
 
 class ViewHolder {
-    ImageView imageView;
+    NetworkImageView imageView;
     TextView textView;
+    TextView priceTextView;
 
     ViewHolder(View v) {
         imageView = v.findViewById(R.id.productImageView);
         textView = v.findViewById(R.id.productTitle);
+        priceTextView = v.findViewById(R.id.priceTextView);
     }
 }
