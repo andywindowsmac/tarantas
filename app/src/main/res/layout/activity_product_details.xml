@@ -22,6 +22,13 @@
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 android:layout_height="300dp" />
+            <ImageView
+                android:id="@+id/testProductDetailsImageView"
+                android:layout_width="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:layout_height="300dp"
+                android:layout_weight="5" />
 
             <LinearLayout
                 android:layout_width="match_parent"

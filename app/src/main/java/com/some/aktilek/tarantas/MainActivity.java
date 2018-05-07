@@ -5,9 +5,10 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainTabbarActivity {
     ViewPager viewPager;
     MenuItem prevMenuItem;
     BottomNavigationView navigation;
@@ -69,4 +70,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void moveTo(SCREENS screen) {
+        Log.d("MainActivity", screen.name());
+        switch (screen) {
+            case Home:
+                viewPager.setCurrentItem(0);
+                break;
+            case PostProduct:
+                viewPager.setCurrentItem(1);
+                break;
+            case Account:
+                viewPager.setCurrentItem(2);
+                break;
+        }
+    }
 }

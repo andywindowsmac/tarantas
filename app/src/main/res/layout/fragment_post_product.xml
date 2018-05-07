@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".PostProductFragment"
-        android:background="#fff">
+        android:background="#fff"
+            android:paddingBottom="50dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -25,9 +26,10 @@
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <Button
+                    <ImageButton
                         android:id="@+id/pickImageButton"
                         android:background="#66d6d0"
+                        android:src="@mipmap/ic_plus_icon"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:text="+"
@@ -139,15 +141,17 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edit_text_border"
                     android:layout_marginBottom="10dp"/>
+
+                <Button
+                    android:id="@+id/postProductButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Опубликовать"
+                    android:textSize="20dp"
+                    android:textColor="#fff"
+                    android:background="#23D160"
+                    />
             </LinearLayout>
         </ScrollView>
-        <Button
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:text="Добавить в корзину"
-            android:textSize="20dp"
-            android:textColor="#fff"
-            android:background="#23D160"
-            />
+
 </LinearLayout>

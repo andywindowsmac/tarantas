@@ -21,7 +21,7 @@ import java.util.HashMap;
 public class FeedFragment extends Fragment {
     ListView productsList;
     HashMap<String, Product> products;
-    Database db = new Database();
+    Database db = Database.SHARED_INSTANCE;
 
     public FeedFragment() {
         // Required empty public constructor

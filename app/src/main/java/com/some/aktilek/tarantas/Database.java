@@ -1,11 +1,20 @@
 package com.some.aktilek.tarantas;
 
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Database {
+    public static int productId = 2;
     public HashMap<String, Product> products = new HashMap<>();
+    public static Database SHARED_INSTANCE = new Database();
 
-    Database() {
+    private Database() {
         initProduct();
     }
 
@@ -44,7 +53,7 @@ public class Database {
 
     private void initProduct() {
         this.products.put("Компрессор кондиционера для Toyota Camry, Corolla, Land Cruiser, Yaris", new Product(
-                "0",
+                "-1",
                 "Компрессор кондиционера для Toyota Camry, Corolla, Land Cruiser, Yaris",
                 "Компрессора кондиционера в наличии, находятся в Астане. Отправка по регионам входит в стримость компрессора. Отправляем транспортной компанией курьером до дома. Приглашаем к сотрудничеству! \n" +
                 "Пришлите нам номер кузова или фото техпаспорта на Whatsupp.\n" +
@@ -69,19 +78,27 @@ public class Database {
                 "Skoda Octavia, Rapid\n" +
                 "И многие многие другие!",
                 "https://olxkz-ringkz03.akamaized.net/images_slandokz/240306780_1_644x461_kompressor-konditsionera-dlya-toyota-camry-corolla-land-cruiser-yaris-almaty.jpg",
-                50000
+                50000,
+                10
         ));
 
         this.products.put("Двигатель (мотор) toyota carina e", new Product(
-                "0",
+                "-1",
                 "Двигатель (мотор) toyota carina e",
                 "4афе привозной двигатель цена за голый двигатель",
                 "https://olxkz-ringkz01.akamaized.net/images_slandokz/207145656_1_1000x700_dvigatel-motor-toyota-carina-e-almaty.jpg",
-                150000
+                150000,
+                5
         ));
     }
 
     public Product getPointByKey(String key) {
         return this.products.get(key);
+    }
+
+    public void postProduct(String title, String description,String imageUrl, double price,int count) {
+        String id = productId + "";
+        productId++;
+        this.products.put(title, new Product(id, title, description, imageUrl, price, count));
     }
 }
