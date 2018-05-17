@@ -96,6 +96,8 @@ public class Database {
         return this.products.get(key);
     }
 
+    /* Product API */
+    /* Add product api */
     public void postProduct(String title, String description,String imageUrl, double price,int count) {
         String id = productId + "";
         productId++;

@@ -112,6 +112,8 @@ public class LoginActivity extends AppCompatActivity {
             this.setPasswordErrors();
             return;
         }
+
+        AuthUtils.login(email, password);
     }
 
     private void pushToSignUp() {

@@ -37,9 +37,13 @@ public class FeedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
+        // Connect screen components with local properties
         this.initViews(view);
+        // Setup toolbar
         this.setupToolbar(view);
+        // Fetch product from db
         products = db.products;
+        // Set adapter
         setAdapter();
         setHasOptionsMenu(true);
         return view;
@@ -59,7 +63,6 @@ public class FeedFragment extends Fragment {
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("MainActivity", "clicked");
                 String key = ((Product) products.values().toArray()[i]).title;
                 pushToDetails(key);
             }
@@ -90,10 +93,29 @@ public class FeedFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.feed_toolbar, menu);
+
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchMenuItem.getActionView();
         searchView.setOnQueryTextListener(this.handleTextChange());
+
+        MenuItem basketMenuItem = menu.findItem(R.id.backetAction);
+        basketMenuItem.setOnMenuItemClickListener(this.handleBasketPress());
         super.onCreateOptionsMenu(menu,inflater);
+    }
+
+    private MenuItem.OnMenuItemClickListener handleBasketPress() {
+        return new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                pushToBasket();
+                return false;
+            }
+        };
+    }
+
+    private void pushToBasket() {
+        Intent intent = new Intent(this.getContext(), BasketActivity.class);
+        startActivity(intent);
     }
 
     @Override

@@ -10,5 +10,6 @@
 
     <item android:id="@+id/backetAction"
         android:title="Backet"
+        android:icon="@drawable/ic_basket"
         app:showAsAction="ifRoom"/>
 </menu>

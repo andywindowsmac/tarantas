@@ -75,13 +75,11 @@ public class PostProductFragment extends Fragment {
 
     private void postProduct() {
         if (!isInputsValid()) return;
-        Log.d("PostProductFragment", "Message");
         String title = titleEditText.getText().toString();
         int count = Integer.parseInt(countEditText.getText().toString());
         double price = Double.parseDouble(priceEditText.getText().toString());
         String description = descriptionEditText.getText().toString();
         String imageUrl = image.getPath();
-        Log.d("PostProductFragment", title);
         db.postProduct(
                 title,
                 description,
@@ -91,7 +89,6 @@ public class PostProductFragment extends Fragment {
         );
 
         clearInputs();
-        Log.d("PostProductFragment", getActivity().toString());
         ((MainTabbarActivity) getActivity()).moveTo(MainTabbarActivity.SCREENS.Home);
     }
 
