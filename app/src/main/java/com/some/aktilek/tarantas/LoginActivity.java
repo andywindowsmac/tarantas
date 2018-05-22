@@ -1,14 +1,24 @@
 package com.some.aktilek.tarantas;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A login screen that offers login via email/password.
@@ -25,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     private View mLoginFormView;
     private Button signButton;
     private Button signUpSuggestion;
+    private CheckBox checkBox;
+    private Boolean isEntityUser = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
         emailLayout = findViewById(R.id.emailLayout);
         passwordLayout = findViewById(R.id.passwordLayout);
+        checkBox = findViewById(R.id.isEntityUser);
     }
 
     private void setEmailErrors() {
@@ -68,6 +81,16 @@ public class LoginActivity extends AppCompatActivity {
         mEmailView.setOnFocusChangeListener(this.handleInputFocusChange());
         signButton.setOnClickListener(this.handleSignButtonPress());
         signUpSuggestion.setOnClickListener(this.handleSignUpSuggestionPress());
+        checkBox.setOnClickListener(this.handleIsEntityUser());
+    }
+
+    private OnClickListener handleIsEntityUser() {
+        return new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isEntityUser = !isEntityUser;
+            }
+        };
     }
 
     private View.OnFocusChangeListener handleInputFocusChange() {
@@ -113,7 +136,57 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        AuthUtils.login(email, password);
+        mProgressView.setVisibility(View.VISIBLE);
+        AuthUtils.login(this, email, password,this.handleUserLogin(), this.handleUserLoginError(), isEntityUser);
+    }
+
+    private Response.ErrorListener handleUserLoginError() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                displayError();
+                mProgressView.setVisibility(View.GONE);
+            }
+        };
+    }
+
+    private void displayError() {
+        Toast.makeText(this, "Login fail", Toast.LENGTH_LONG).show();
+    }
+
+    private Response.Listener<String> handleUserLogin() {
+        return new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    Log.d("LoginActivity", response.toString());
+                    JSONObject jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    if (status.contentEquals("error")) {
+                        String message = jsonObject.getString("message");
+                        Log.d("LoginActivity", message);
+                        mProgressView.setVisibility(View.GONE);
+                        return;
+                    }
+
+                    String userType = jsonObject.getString("userType");
+                    String token = jsonObject.getString("token");
+                    String userId = jsonObject.getString("id");
+                    String email = jsonObject.getString("email");
+                    saveUserData(token, userType, userId, email);
+                    mProgressView.setVisibility(View.GONE);
+                } catch (Exception e) {
+                    mProgressView.setVisibility(View.GONE);
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
+    private void saveUserData(String token,String userType,String userId,String email) {
+        AuthUtils.setUserData(token, email, userId, userType, this);
+        Toast.makeText(this, "Login succeed", Toast.LENGTH_LONG).show();
+        this.finish();
     }
 
     private void pushToSignUp() {

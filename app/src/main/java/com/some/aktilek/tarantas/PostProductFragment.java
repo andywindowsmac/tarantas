@@ -46,6 +46,7 @@ public class PostProductFragment extends Fragment {
 
         this.initViews(view);
         this.attachListener();
+        this.pushToLogin();
         return view;
     }
 
@@ -141,5 +142,19 @@ public class PostProductFragment extends Fragment {
             this.pickImageButton.setImageBitmap(myBitmap);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void pushToLogin() {
+        if (!AuthUtils.isUserAuthenticated(this.getContext())) return;
+        Intent intent = new Intent(this.getContext(), LoginActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser){
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            this.pushToLogin();
+        }
     }
 }

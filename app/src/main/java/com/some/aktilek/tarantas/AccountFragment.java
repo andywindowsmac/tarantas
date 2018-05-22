@@ -3,11 +3,17 @@ package com.some.aktilek.tarantas;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class AccountFragment extends Fragment {
+    private Button logoutButton;
+    private TextView userEmail;
+
     public AccountFragment() {}
 
     public static AccountFragment newInstance(String param1, String param2) {
@@ -29,13 +35,33 @@ public class AccountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         this.pushToLogin();
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
+        logoutButton = view.findViewById(R.id.logoutButton);
+        userEmail = view.findViewById(R.id.userEmail);
+        return view;
     }
 
     private void pushToLogin() {
+        if (AuthUtils.isUserAuthenticated(this.getContext())) {
+            this.bindView();
+            return;
+        }
         Intent intent = new Intent(this.getContext(), LoginActivity.class);
         startActivity(intent);
+    }
+
+    private void bindView() {
+        String userEmail = AuthUtils.getEmail(this.getContext());
+        Log.d("LoginActivity", userEmail);
+        this.userEmail.setText(userEmail);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser){
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            this.pushToLogin();
+        }
     }
 }
