@@ -11,6 +11,12 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
+    <string name="prompt_phone_number">Номер телефона</string>
+    <string name="prompt_company_name">Название компании</string>
+    <string name="prompt_first_name">Имя</string>
+    <string name="prompt_last_name">Фамилия</string>
+    <string name="prompt_city">Город</string>
+    <string name="prompt_address">Адрес</string>
     <string name="prompt_password">Пароль</string>
     <string name="action_sign_in">Войти</string>
     <string name="action_sign_up">Зарегистрироваться</string>

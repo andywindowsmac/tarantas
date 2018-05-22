@@ -57,103 +57,88 @@ public class API {
     }
 
     public static void loginEntity(Context context, String email, String password,Response.Listener response,Response.ErrorListener error) {
-        try {
             /* Endpoint */
             String endpoint = API_URL + "/api_login_law_user.php";
             RequestQueue queue = Volley.newRequestQueue(context);
 
             /* Body */
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("email", email);
-            jsonBody.put("password", password);
-            final String requestBody = jsonBody.toString();
+            final Map<String, String> body = new HashMap<String, String>();
+            body.put("email", email);
+            body.put("password", password);
 
-            /* Request */
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, endpoint, null, response, error){
+            StringRequest request = new StringRequest(Request.Method.POST, endpoint, response, error) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    return body;
+                }
+
                 @Override
                 public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-
-                @Override
-                protected Response parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    if (response != null) {
-                        responseString = String.valueOf(response.statusCode);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                    return "application/x-www-form-urlencoded; charset=utf-8";
                 }
             };
 
             queue.add(request);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
     }
 
-    public static void signUpEntity(Context context, String email, String password, String companyName, int locationId, String name, String surname, int number, String address, Response.Listener response,Response.ErrorListener error) {
-        try {
+    public static void signUpIndividual(Context context, String number, String email, String password, Response.Listener response,Response.ErrorListener error) {
             /* Endpoint */
             String endpoint = API_URL + "/api_regis_phys_user.php";
             RequestQueue queue = Volley.newRequestQueue(context);
 
             /* Body */
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("email", email);
-            jsonBody.put("password", password);
-            jsonBody.put("comp_name", companyName);
-            jsonBody.put("location_id", locationId);
-            jsonBody.put("name", name);
-            jsonBody.put("surname", surname);
-            jsonBody.put("number", number);
-            jsonBody.put("address", address);
-            final String requestBody = jsonBody.toString();
+            final Map<String, String> body = new HashMap<String, String>();
+            body.put("email", email);
+            body.put("password", password);
+            body.put("number", number);
 
-            /* Request */
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, endpoint, null, response, error){
+            StringRequest request = new StringRequest(Request.Method.POST, endpoint, response, error) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    return body;
+                }
+
                 @Override
                 public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-
-                @Override
-                protected Response parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    if (response != null) {
-                        responseString = String.valueOf(response.statusCode);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                    return "application/x-www-form-urlencoded; charset=utf-8";
                 }
             };
 
             queue.add(request);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    }
 
+    public static void signUpEntity(Context context, String email, String password, String companyName, int locationId, String name, String surname, String number, String address, Response.Listener response,Response.ErrorListener error) {
+            /* Endpoint */
+            String endpoint = API_URL + "/api_regis_phys_user.php";
+            RequestQueue queue = Volley.newRequestQueue(context);
+
+            /* Body */
+            final Map<String, String> body = new HashMap<String, String>();
+            body.put("email", email);
+            body.put("password", password);
+            body.put("number", number);
+            body.put("email", email);
+            body.put("password", password);
+            body.put("comp_name", companyName);
+            body.put("location_id", 0 + "");
+            body.put("name", name);
+            body.put("surname", surname);
+            body.put("number", number);
+            body.put("address", address);
+
+            StringRequest request = new StringRequest(Request.Method.POST, endpoint, response, error) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    return body;
+                }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/x-www-form-urlencoded; charset=utf-8";
+                }
+            };
+
+            queue.add(request);
     }
 
     public static void addComment(Context context, int productId, int individualId, String text, Response.Listener response,Response.ErrorListener error) {
@@ -392,55 +377,6 @@ public class API {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-    }
-
-    public static void signUpIndividual(Context context, int number, String email, String password, Response.Listener response,Response.ErrorListener error) {
-        try {
-            /* Endpoint */
-            String endpoint = API_URL + "/api_regis_phys_user.php";
-            RequestQueue queue = Volley.newRequestQueue(context);
-
-            /* Body */
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("number", number);
-            jsonBody.put("email", email);
-            jsonBody.put("password", password);
-            final String requestBody = jsonBody.toString();
-
-            /* Request */
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, endpoint, null, response, error){
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-
-                @Override
-                protected Response parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    if (response != null) {
-                        responseString = String.valueOf(response.statusCode);
-                        // can get more details such as response.headers
-                    }
-                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                }
-            };
-
-            queue.add(request);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public static void removeBasket(Context context, int individualId, int productId, Response.Listener response,Response.ErrorListener error) {

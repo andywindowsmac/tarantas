@@ -2,6 +2,7 @@ package com.some.aktilek.tarantas;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.android.volley.Response;
 
@@ -33,7 +34,7 @@ public class AuthUtils {
         try {
             SharedPreferences sh = context.getSharedPreferences(AUTH_PREFERENCE, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sh.edit();
-            String token = sh.getString(JWT_TOKEN, null);
+            String token = sh.getString(JWT_TOKEN, "");
             if (token == null) {
                 throw new Exception("empty");
             }
@@ -48,7 +49,7 @@ public class AuthUtils {
         try {
             SharedPreferences sh = context.getSharedPreferences(AUTH_PREFERENCE, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sh.edit();
-            String token = sh.getString(USER_EMAIL, null);
+            String token = sh.getString(USER_EMAIL, "");
             if (token == null) {
                 throw new Exception("empty");
             }
@@ -63,7 +64,7 @@ public class AuthUtils {
         try {
             SharedPreferences sh = context.getSharedPreferences(AUTH_PREFERENCE, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sh.edit();
-            String token = sh.getString(USER_ID, null);
+            String token = sh.getString(USER_ID, "");
             if (token == null) {
                 throw new Exception("empty");
             }
@@ -78,7 +79,7 @@ public class AuthUtils {
         try {
             SharedPreferences sh = context.getSharedPreferences(AUTH_PREFERENCE, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sh.edit();
-            String token = sh.getString(USER_TYPE, null);
+            String token = sh.getString(USER_TYPE, "");
             if (token == null) {
                 throw new Exception("empty");
             }
@@ -89,7 +90,7 @@ public class AuthUtils {
         }
     }
 
-    public static boolean clearToken(Context context) {
+    public static boolean logout(Context context) {
         try {
             SharedPreferences sh = context.getSharedPreferences(AUTH_PREFERENCE, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sh.edit();
@@ -106,7 +107,10 @@ public class AuthUtils {
         try {
             SharedPreferences sh = context.getSharedPreferences(AUTH_PREFERENCE, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sh.edit();
-            String token = sh.getString(JWT_TOKEN, null);
+            String token = sh.getString(JWT_TOKEN, "");
+            if (token == null) {
+                throw new Exception("empty");
+            }
             return !token.isEmpty();
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,6 +124,14 @@ public class AuthUtils {
             return;
         }
         API.loginIndividual(context, email, password, response, error);
+    }
+
+    public static void signUpIndividual(Context context, String email, String password, String phoneNumber, Response.Listener response, Response.ErrorListener error, boolean isEntityUser) {
+        API.signUpIndividual(context, phoneNumber, email, password, response, error);
+    }
+
+    public static void signUpEntity(Context context, String email, String password, String companyName, int locationId, String name, String surname, String number, String address, Response.Listener response,Response.ErrorListener error) {
+        API.signUpEntity(context,email,password,companyName,locationId,name, surname,number,address,response,error);
     }
 
     public static boolean isEmailValid(String email) {
